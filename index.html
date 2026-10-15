@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#155eef" />
+  <title>SpendWise — Expense & Budget Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <a class="brand" href="#" aria-label="SpendWise home">
+        <span class="brand-mark"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7.5A2.5 2.5 0 0 1 6.5 5H20v14H6.5A2.5 2.5 0 0 1 4 16.5z"/><path d="M4 8h16M15 12h5"/></svg></span>
+        <span>Spend<span class="brand-light">Wise</span></span>
+      </a>
+      <div class="workspace-label">WORKSPACE</div>
+      <nav class="nav-menu" aria-label="Main navigation">
+        <button class="nav-link active" data-view="dashboard"><span class="nav-icon">▦</span> Dashboard</button>
+        <button class="nav-link" data-view="transactions"><span class="nav-icon">↔</span> Transactions</button>
+        <button class="nav-link" data-view="budgets"><span class="nav-icon">◉</span> Budgets</button>
+        <button class="nav-link" data-view="reports"><span class="nav-icon">▥</span> Reports</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <div class="help-icon">✦</div>
+          <strong>Small steps add up.</strong>
+          <p>Keep tracking your spending to build better money habits.</p>
+        </div>
+        <button class="nav-link" id="resetDemoBtn"><span class="nav-icon">↻</span> Reset demo data</button>
+        <div class="sidebar-footer"><span class="status-dot"></span> Prototype mode <span class="version">v1.0</span></div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <button class="mobile-menu" id="mobileMenuBtn" aria-label="Open navigation">☰</button>
+        <div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumbPage">Dashboard</strong></div>
+        <div class="topbar-actions">
+          <div class="date-pill"><span>◷</span><span id="todayLabel">Today</span></div>
+          <button class="avatar" id="profileBtn" title="Prototype profile">JR</button>
+        </div>
+      </header>
+
+      <section class="page-view" id="dashboardView">
+        <div class="page-heading">
+          <div><p class="eyebrow">YOUR MONEY, IN CONTROL</p><h1>Good day, Jonard <span class="wave">✦</span></h1><p class="subtitle">Here’s a snapshot of your personal finances.</p></div>
+          <button class="btn btn-primary" id="addTransactionTop"><span>＋</span> Add transaction</button>
+        </div>
+        <div class="summary-grid">
+          <article class="summary-card balance-card">
+            <div class="card-top"><span class="card-label">Total balance</span><span class="metric-icon blue-icon">₱</span></div>
+            <div class="metric-value" id="totalBalance">₱0.00</div>
+            <div class="metric-foot"><span class="trend neutral" id="balanceTrend">Updated just now</span><span class="muted">Income − expenses</span></div>
+            <div class="balance-decoration"></div>
+          </article>
+          <article class="summary-card">
+            <div class="card-top"><span class="card-label">Total income</span><span class="metric-icon green-icon">↗</span></div>
+            <div class="metric-value" id="totalIncome">₱0.00</div>
+            <div class="metric-foot"><span class="trend positive">Money received</span><span class="muted">This month</span></div>
+          </article>
+          <article class="summary-card">
+            <div class="card-top"><span class="card-label">Total expenses</span><span class="metric-icon red-icon">↘</span></div>
+            <div class="metric-value" id="totalExpenses">₱0.00</div>
+            <div class="metric-foot"><span class="trend negative">Money spent</span><span class="muted">This month</span></div>
+          </article>
+          <article class="summary-card">
+            <div class="card-top"><span class="card-label">Monthly budget left</span><span class="metric-icon violet-icon">◎</span></div>
+            <div class="metric-value" id="budgetLeft">₱0.00</div>
+            <div class="progress-track"><div class="progress-fill" id="budgetProgress"></div></div>
+            <div class="card-bottom-line"><span id="budgetUsedLabel">0% used</span><span id="budgetLimitLabel">of ₱0.00</span></div>
+          </article>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel spending-panel">
+            <div class="panel-heading"><div><h2>Spending overview</h2><p class="panel-subtitle">Your income and expenses over time</p></div><select id="chartPeriod" class="select-control" aria-label="Chart period"><option value="6">Last 6 months</option><option value="3">Last 3 months</option><option value="12">Last 12 months</option></select></div>
+            <div class="chart-legend"><span><i class="legend-dot income-dot"></i> Income</span><span><i class="legend-dot expense-dot"></i> Expenses</span></div>
+            <div class="bar-chart" id="overviewChart" aria-label="Income and expenses chart"></div>
+          </section>
+          <section class="panel category-panel">
+            <div class="panel-heading"><div><h2>Spending by category</h2><p class="panel-subtitle">Where your money goes</p></div><button class="text-button" data-navigate="reports">View report ↗</button></div>
+            <div class="donut-wrap"><div class="donut-chart" id="categoryDonut"><div class="donut-center"><strong id="donutTotal">₱0</strong><span>Total spent</span></div></div></div>
+            <div class="category-legend" id="categoryLegend"></div>
+          </section>
+        </div>
+
+        <section class="panel transactions-panel">
+          <div class="panel-heading"><div><h2>Recent transactions</h2><p class="panel-subtitle">Your latest money activity</p></div><button class="text-button" data-navigate="transactions">See all transactions ↗</button></div>
+          <div class="table-wrap"><table><thead><tr><th>TRANSACTION</th><th>CATEGORY</th><th>DATE</th><th>AMOUNT</th><th>TYPE</th><th></th></tr></thead><tbody id="recentTransactionsBody"></tbody></table></div>
+          <div class="empty-state hidden" id="recentEmpty">No transactions yet. Add your first transaction to get started.</div>
+        </section>
+      </section>
+
+      <section class="page-view hidden" id="transactionsView">
+        <div class="page-heading"><div><p class="eyebrow">MONEY ACTIVITY</p><h1>Transactions</h1><p class="subtitle">Keep every peso accounted for.</p></div><button class="btn btn-primary" id="addTransactionPage"><span>＋</span> Add transaction</button></div>
+        <section class="panel">
+          <div class="filter-row"><div class="search-wrap"><span>⌕</span><input id="transactionSearch" type="search" placeholder="Search transactions..." /></div><select id="typeFilter" class="select-control"><option value="all">All types</option><option value="income">Income</option><option value="expense">Expense</option></select><select id="categoryFilter" class="select-control"><option value="all">All categories</option></select></div>
+          <div class="table-wrap"><table><thead><tr><th>TRANSACTION</th><th>CATEGORY</th><th>DATE</th><th>AMOUNT</th><th>TYPE</th><th>ACTIONS</th></tr></thead><tbody id="allTransactionsBody"></tbody></table></div>
+          <div class="empty-state hidden" id="transactionsEmpty">No matching transactions found.</div>
+          <div class="table-footer"><span id="transactionCount">0 transactions</span><button class="btn btn-secondary btn-small" id="exportCsvBtn">↓ Export CSV</button></div>
+        </section>
+      </section>
+
+      <section class="page-view hidden" id="budgetsView">
+        <div class="page-heading"><div><p class="eyebrow">PLAN WITH PURPOSE</p><h1>Budgets</h1><p class="subtitle">Set limits that help your money go further.</p></div><button class="btn btn-primary" id="setBudgetBtn">＋ Set monthly budget</button></div>
+        <div class="budget-overview-grid">
+          <article class="summary-card"><div class="card-top"><span class="card-label">Overall monthly limit</span><span class="metric-icon blue-icon">₱</span></div><div class="metric-value" id="budgetPageLimit">₱0.00</div><p class="muted small-text">Your planned spending for this month</p></article>
+          <article class="summary-card"><div class="card-top"><span class="card-label">Spent so far</span><span class="metric-icon red-icon">↘</span></div><div class="metric-value" id="budgetPageSpent">₱0.00</div><p class="muted small-text" id="budgetPageSpentNote">Across all categories</p></article>
+          <article class="summary-card"><div class="card-top"><span class="card-label">Available to spend</span><span class="metric-icon green-icon">✓</span></div><div class="metric-value" id="budgetPageRemaining">₱0.00</div><p class="muted small-text">Remaining within your limit</p></article>
+        </div>
+        <section class="panel"><div class="panel-heading"><div><h2>Category budgets</h2><p class="panel-subtitle">Track spending against your planned amounts</p></div></div><div class="budget-list" id="budgetList"></div><div class="empty-state hidden" id="budgetEmpty">No category budgets yet. Set an overall budget to begin.</div></section>
+      </section>
+
+      <section class="page-view hidden" id="reportsView">
+        <div class="page-heading"><div><p class="eyebrow">YOUR FINANCIAL PICTURE</p><h1>Reports</h1><p class="subtitle">Understand your habits and make informed decisions.</p></div><button class="btn btn-secondary" id="reportExportBtn">↓ Export transactions</button></div>
+        <div class="summary-grid report-summary">
+          <article class="summary-card"><div class="card-top"><span class="card-label">Income this month</span><span class="metric-icon green-icon">↗</span></div><div class="metric-value" id="reportIncome">₱0.00</div></article>
+          <article class="summary-card"><div class="card-top"><span class="card-label">Expenses this month</span><span class="metric-icon red-icon">↘</span></div><div class="metric-value" id="reportExpenses">₱0.00</div></article>
+          <article class="summary-card"><div class="card-top"><span class="card-label">Net savings this month</span><span class="metric-icon blue-icon">⌁</span></div><div class="metric-value" id="reportSavings">₱0.00</div></article>
+        </div>
+        <div class="content-grid">
+          <section class="panel"><div class="panel-heading"><div><h2>Monthly comparison</h2><p class="panel-subtitle">Income vs. expenses</p></div></div><div class="bar-chart report-chart" id="reportChart"></div></section>
+          <section class="panel"><div class="panel-heading"><div><h2>Category breakdown</h2><p class="panel-subtitle">Expenses this month</p></div></div><div class="report-category-list" id="reportCategoryList"></div></section>
+        </div>
+        <section class="panel insight-panel"><div class="insight-symbol">✦</div><div><h2>Your money insight</h2><p id="moneyInsight">Add transactions to see a simple spending insight here.</p></div></section>
+      </section>
+
+      <footer class="main-footer"><span>© <span id="yearLabel"></span> SpendWise</span><span>Made for clearer money habits <span class="footer-heart">♥</span></span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop hidden" id="transactionModal" role="dialog" aria-modal="true" aria-labelledby="transactionModalTitle">
+    <div class="modal-card">
+      <div class="modal-heading"><div><p class="eyebrow">RECORD YOUR MONEY</p><h2 id="transactionModalTitle">Add transaction</h2></div><button class="icon-button" id="closeTransactionModal" aria-label="Close dialog">×</button></div>
+      <form id="transactionForm">
+        <input type="hidden" id="transactionId" />
+        <div class="form-group"><label>Transaction type</label><div class="segmented-control"><label><input type="radio" name="transactionType" value="expense" checked><span>↘ Expense</span></label><label><input type="radio" name="transactionType" value="income"><span>↗ Income</span></label></div></div>
+        <div class="form-group"><label for="transactionTitle">Title <span class="required">*</span></label><input id="transactionTitle" maxlength="100" required placeholder="e.g. Grocery shopping" /></div>
+        <div class="form-row"><div class="form-group"><label for="transactionAmount">Amount (₱) <span class="required">*</span></label><input id="transactionAmount" type="number" min="0.01" step="0.01" required placeholder="0.00" /></div><div class="form-group"><label for="transactionCategory">Category</label><select id="transactionCategory" required></select></div></div>
+        <div class="form-group"><label for="transactionDate">Date <span class="required">*</span></label><input id="transactionDate" type="date" required /></div>
+        <div class="form-group"><label for="transactionNotes">Notes (optional)</label><textarea id="transactionNotes" rows="2" maxlength="300" placeholder="Add a short note..."></textarea></div>
+        <p class="form-error hidden" id="formError"></p>
+        <div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelTransactionBtn">Cancel</button><button type="submit" class="btn btn-primary" id="saveTransactionBtn">Save transaction</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="budgetModal" role="dialog" aria-modal="true" aria-labelledby="budgetModalTitle">
+    <div class="modal-card compact-modal">
+      <div class="modal-heading"><div><p class="eyebrow">PLAN YOUR SPENDING</p><h2 id="budgetModalTitle">Set monthly budget</h2></div><button class="icon-button" id="closeBudgetModal" aria-label="Close dialog">×</button></div>
+      <form id="budgetForm"><div class="form-group"><label for="overallBudgetInput">Overall monthly budget (₱)</label><input id="overallBudgetInput" type="number" min="0" step="0.01" required placeholder="e.g. 10000" /></div><p class="form-help">This is your total planned spending for the current month.</p><div class="modal-actions"><button type="button" class="btn btn-secondary" id="cancelBudgetBtn">Cancel</button><button class="btn btn-primary" type="submit">Save budget</button></div></form>
+    </div>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>
